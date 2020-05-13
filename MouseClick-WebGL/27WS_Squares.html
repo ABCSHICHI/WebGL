@@ -1,0 +1,43 @@
+<!DOCTYPE>
+<html>
+	<head>
+		<meta charset="UTF-8"/>
+		<title></title>
+	</head>
+	<body><!--文档主体-->
+		<!--定义画布，webgl就是在这里进行绘制-->
+		<!-- 定义其三个属性，id：方便获取属性 -->
+		<canvas id="webgl" width="512" height="512">
+			please use the browser supporting "canvas"
+		</canvas>
+		<!-- 顶点着色器shader程序 -->
+		<script id="vertex-shader" type="x-shader/x-vertex">
+		attribute vec3 a_Position;	// 顶点位置属性：顶点属性 变量类型（四维向量）变量 
+		attribute vec3 a_Color;//输入顶点颜色
+		uniform mat4 u_matMVP;//模视投影矩阵
+		varying vec4 v_Color;//输出顶点颜色
+		void main(){
+		  gl_Position = u_matMVP*vec4(a_Position,1.0);//裁剪坐标
+		  v_Color = vec4(a_Color,1.0);
+		}
+		</script>
+		<!-- 片元着色器shader程序（潜在像素） -->
+		<script id="fragment-shader" type="x-shader/x-fragment">
+			 precision mediump float;//浮点数精度设为中等；precision:精度 mediump：中等
+			varying vec4 v_Color;
+			 void main(){
+				//决定片元颜色
+				gl_FragColor = v_Color;	// 片元颜色（白色）
+			}
+		</script>
+		<!-- 设置WEBGL的上下文 -->
+		<script type="text/javascript" src="./Common/webgl-utils.js"></script>
+		<!-- 对shader进行编译和链接 -->
+		<script type="text/javascript" src="./Common/initShaders.js"></script>
+		<!-- 定义了矩阵类型和向量类型 -->
+		<script type="text/javascript" src="./Common/MV.js"></script>
+
+		<!-- 主程序 -->
+		<script type="text/javascript" src="27WS_Squares.js"></script>
+	</body>
+</html>

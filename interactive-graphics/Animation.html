@@ -1,0 +1,58 @@
+<!DOCTYPE>
+<html>
+	<head>
+		<meta charset="UTF-8"/>
+		<title>interactive graphics Animation</title>
+	</head>
+	<body><!--文档主体-->
+		<!--定义画布，webgl就是在这里进行绘制-->
+		<!-- 定义其三个属性，id：方便获取属性 -->
+		<canvas id="webgl" width="512" height="512">
+			please use the browser supporting "canvas"
+		</canvas>
+	</br>
+		<div>
+			<button id="IncSpeed">加速</button>
+			<button id="DecSpeed">减速</button>
+			正方形颜色：
+			<select id="ColorMenu" size="3">
+				<option value="0">白色</option>
+				<option value="1">红色</option>
+				<option value="2">绿色</option>
+				<option value="0">蓝色</option>
+			</select>
+		</div>
+		
+		<!-- 顶点着色器shader程序 -->
+		<script id="vertex-shader" type="x-shader/x-vertex">
+			attribute vec2 a_Position;	// 顶点位置属性：顶点属性 变量类型（四维向量）变量 
+			uniform mat4 u_matProj;
+			uniform float u_Angle;
+			void main(){
+			  vec4 pos = vec4(a_Position,0.0,1.0);//裁剪坐标
+			  float rad = radians(u_Angle);//角度转弧度
+			  pos.x = a_Position.x * cos(rad) - a_Position.y * sin(rad);
+			  pos.y = a_Position.x * sin(rad) + a_Position.y * cos(rad);
+			  gl_Position = u_matProj * pos;	// 计算裁剪坐标系下坐标
+			}
+		</script>
+		<!-- 片元着色器shader程序（潜在像素） -->
+		<script id="fragment-shader" type="x-shader/x-fragment">
+			 precision mediump float;//浮点数精度设为中等；precision:精度 mediump：中等
+			 uniform vec3 u_Color;
+			void main(){
+				//决定片元颜色
+				gl_FragColor = vec4(u_Color, 1.0);	// 片元颜色（白色）
+			}
+		</script>
+		<!-- 设置WEBGL的上下文 -->
+		<script type="text/javascript" src="./Common/webgl-utils.js"></script>
+		<!-- 对shader进行编译和链接 -->
+		<script type="text/javascript" src="./Common/initShaders.js"></script>
+		<!-- 定义了矩阵类型和向量类型 -->
+		<script type="text/javascript" src="./Common/MV.js"></script>
+
+		<!-- 主程序 -->
+		<script type="text/javascript" src="Animation.js"></script>
+	</body>
+</html>
